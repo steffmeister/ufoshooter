@@ -1,0 +1,6 @@
+## generic files to ignore
+*~
+CmakeFiles
+ufoshooter.dir
+Makefile
+cmake_install.cmake
