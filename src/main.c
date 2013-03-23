@@ -98,6 +98,8 @@ struct config {
 	unsigned int audio_sound;
 };
 
+char* userTempString;
+
 struct scores high_score;
 struct config settings;
 
@@ -1076,15 +1078,30 @@ void game(void) {
 						high_score.player[rank_counter+1] = high_score.player[rank_counter];
 						rank_counter--;
 					}
-
+					
+					
+					userTempString = getenv("USER");
+					if (userTempString == NULL) {
+						userTempString = getenv("USERNAME");
+					}
+					
+					if (userTempString == NULL) {
+						strcpy(high_score.player[rank].name, "You");
+					} else {
+						strcpy(high_score.player[rank].name, userTempString);
+					}
+					
+					/*
+					#ifndef WIN32
+	                    sprintf(high_score.player[rank].name, "%s", getenv("USERNAME"));
+		            #else
+		                sprintf(high_score.player[rank].name, "%s", getenv("USER"));
+		            #endif*/
+		            //strcpy(high_score.player[rank].name, "You");
+					high_score.player[rank].score = score;
+					//printf("*** you ranked #%d", rank);
 				}
-				#ifndef WIN32
-                    sprintf(high_score.player[rank].name, "%s", getenv("USERNAME"));
-                #else
-                    sprintf(high_score.player[rank].name, "%s", getenv("USER"));
-                #endif
-				high_score.player[rank].score = score;
-				//printf("*** you ranked #%d", rank);
+				
 			}
 			time_left = -2;
 		} else if (time_left == -2) {
@@ -1431,7 +1448,7 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "SDL init failed:  %s\n", SDL_GetError());
 		exit(1);
 	}
-	/* Beim Beenden des Programms aufräumen */
+	/* Beim Beenden des Programms aufr\E4umen */
 	atexit(SDL_Quit);
 
 	/* if sound is enabled */
